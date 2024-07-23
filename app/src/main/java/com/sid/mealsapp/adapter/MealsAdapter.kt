@@ -19,8 +19,7 @@ class MealsAdapter @Inject constructor() :
     var onClickSharedFlow = MutableSharedFlow<MealEntity>()
     var mealsList = mutableListOf<MealEntity>()
 
-    @Inject
-    lateinit var incredientsAdapter: IncredientsAdapter
+//    @Inject
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterViewHolder {
@@ -47,12 +46,7 @@ class MealsAdapter @Inject constructor() :
     inner class AdapterViewHolder(val layoutStudentBinding: LayoutItemsMealsBinding) :
         ViewHolder(layoutStudentBinding.root) {
         init {
-            layoutStudentBinding.rvIncredients.layoutManager = LinearLayoutManager(
-                layoutStudentBinding.rvIncredients.context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            layoutStudentBinding.rvIncredients.adapter = incredientsAdapter
+
 
             layoutStudentBinding.llImage.setOnClickListener {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -63,6 +57,15 @@ class MealsAdapter @Inject constructor() :
 
         fun setData(mealEntity: MealEntity) {
             try {
+                var incredientsAdapter = IncredientsAdapter()
+
+                layoutStudentBinding.rvIncredients.layoutManager = LinearLayoutManager(
+                    layoutStudentBinding.rvIncredients.context,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
+                layoutStudentBinding.rvIncredients.adapter = incredientsAdapter
+
                 mealEntity.strMeal.let {
                     layoutStudentBinding.tvMealName.text = it
                 }
@@ -77,7 +80,9 @@ class MealsAdapter @Inject constructor() :
                     }
                 }
                 var list = getIngredients(mealEntity)
+
                 incredientsAdapter.setData(list)
+
 
             } catch (e: Exception) {
                 e.printStackTrace()

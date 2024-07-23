@@ -1,9 +1,15 @@
 package com.sid.mealsapp.adapter
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import com.sid.mealsapp.R
 import com.sid.mealsapp.databinding.LayoutItemIncredentsBinding
 import com.sid.mealsapp.utils.AppUtils
 import javax.inject.Inject
@@ -44,11 +50,33 @@ class IncredientsAdapter @Inject constructor() :
                     layoutStudentBinding.tvIncredientName.text = it
 
                     val incredentimageUrl = "https://www.themealdb.com/images/ingredients/$it.png"
-                    AppUtils.loadImageWithURL(
+
+                    Glide.with(layoutStudentBinding.llIncredent.context)
+                        .load(incredentimageUrl)
+                        .error(R.mipmap.ic_launcher_round)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(object : CustomTarget<Drawable>() {
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable,
+                                transition: Transition<in Drawable>?
+                            ) {
+                                layoutStudentBinding.ivIncredient.setImageDrawable(resource)
+                            }
+
+                            override fun onLoadFailed(errorDrawable: Drawable?) {
+                                super.onLoadFailed(errorDrawable)
+                                layoutStudentBinding.ivIncredient.setImageDrawable(errorDrawable)
+                            }
+
+                        })
+                  /*  AppUtils.loadImageWithURL(
                         layoutStudentBinding.ivIncredient.context,
                         layoutStudentBinding.ivIncredient,
                         incredentimageUrl
-                    )
+                    )*/
                 }
 
 
